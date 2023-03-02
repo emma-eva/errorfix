@@ -1,0 +1,272 @@
+apksigner.c: In function ‘sign_apk’:
+apksigner.c:14:5: error: unknown type name ‘Config’
+   14 |     Config config = {0};
+      |     ^~~~~~
+apksigner.c:15:15: error: implicit declaration of function ‘parse_config’ [-Werror=implicit-function-declaration]
+   15 |     int ret = parse_config(config_file, &config);
+      |               ^~~~~~~~~~~~
+apksigner.c:65:106: error: request for member ‘sections’ in something not a structure or union
+   65 | int pkcs7_ret = pkcs7_sign(&pkcs7, keystore_data, keystore_size, key_alias, keystore_password, config.sections[0].options[1].value, apk_hash, SHA256_DIGEST_LENGTH);
+      |                                                                                                      ^
+
+apksigner.c:83:22: error: ‘MAX_VALUE_LEN’ undeclared (first use in this function)
+   83 |     char output_file[MAX_VALUE_LEN];
+      |                      ^~~~~~~~~~~~~
+apksigner.c:83:22: note: each undeclared identifier is reported only once for each function it appears in
+apksigner.c:83:10: error: unused variable ‘output_file’ [-Werror=unused-variable]
+   83 |     char output_file[MAX_VALUE_LEN];
+      |          ^~~~~~~~~~~
+apksigner.c:23:5: error: ignoring return value of ‘fgets’, declared with attribute warn_unused_result [-Werror=unused-result]
+   23 |     fgets(keystore_password, MAX_KEYSTORE_PASSWORD_LENGTH, stdin);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+apksigner.c:44:5: error: ignoring return value of ‘fread’, declared with attribute warn_unused_result [-Werror=unused-result]
+   44 |     fread(keystore_data, keystore_size, 1, fp);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+pkcs7.c: In function ‘pkcs7_sign’:
+pkcs7.c:7:5: error: unknown type name ‘PKCS12’; did you mean ‘PKCS7’?
+    7 |     PKCS12 *p12 = d2i_PKCS12_bio(in, NULL);
+      |     ^~~~~~
+      |     PKCS7
+pkcs7.c:7:19: error: implicit declaration of function ‘d2i_PKCS12_bio’; did you mean ‘d2i_PKCS8_bio’? [-Werror=implicit-function-declaration]
+    7 |     PKCS12 *p12 = d2i_PKCS12_bio(in, NULL);
+      |                   ^~~~~~~~~~~~~~
+      |                   d2i_PKCS8_bio
+pkcs7.c:7:19: error: initialization of ‘int *’ from ‘int’ makes pointer from integer without a cast [-Werror=int-conversion]
+pkcs7.c:14:10: error: implicit declaration of function ‘PKCS12_parse’ [-Werror=implicit-function-declaration]
+   14 |     if (!PKCS12_parse(p12, key_password, &pkey, &cert, &ca)) {
+      |          ^~~~~~~~~~~~
+pkcs7.c:15:9: error: implicit declaration of function ‘PKCS12_free’; did you mean ‘PKCS7_free’? [-Werror=implicit-function-declaration]
+   15 |         PKCS12_free(p12);
+      |         ^~~~~~~~~~~
+      |         PKCS7_free
+pkcs7.c:29:25: error: passing argument 1 of ‘PKCS7_add_attribute’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+   29 |     PKCS7_add_attribute(pkcs7_raw, OBJ_nid2obj(NID_pkcs9_contentType), V_ASN1_OBJECT, OBJ_nid2obj(NID_pkcs7_data));
+      |                         ^~~~~~~~~
+      |                         |
+      |                         PKCS7 * {aka struct pkcs7_st *}
+In file included from pkcs7.h:4,
+                 from pkcs7.c:1:
+/usr/include/openssl/pkcs7.h:275:44: note: expected ‘PKCS7_SIGNER_INFO *’ {aka ‘struct pkcs7_signer_info_st *’} but argument is of type ‘PKCS7 *’ {aka ‘struct pkcs7_st *’}
+  275 | int PKCS7_add_attribute(PKCS7_SIGNER_INFO *p7si, int nid, int atrtype,
+      |                         ~~~~~~~~~~~~~~~~~~~^~~~
+pkcs7.c:29:36: error: passing argument 2 of ‘PKCS7_add_attribute’ makes integer from pointer without a cast [-Werror=int-conversion]
+   29 |     PKCS7_add_attribute(pkcs7_raw, OBJ_nid2obj(NID_pkcs9_contentType), V_ASN1_OBJECT, OBJ_nid2obj(NID_pkcs7_data));
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                    |
+      |                                    ASN1_OBJECT * {aka struct asn1_object_st *}
+In file included from pkcs7.h:4,
+                 from pkcs7.c:1:
+/usr/include/openssl/pkcs7.h:275:54: note: expected ‘int’ but argument is of type ‘ASN1_OBJECT *’ {aka ‘struct asn1_object_st *’}
+  275 | int PKCS7_add_attribute(PKCS7_SIGNER_INFO *p7si, int nid, int atrtype,
+      |                                                  ~~~~^~~
+pkcs7.c:30:95: error: ‘hash’ undeclared (first use in this function)
+   30 |     PKCS7_add_signed_attribute(pkcs7_raw, OBJ_nid2obj(NID_pkcs9_messageDigest), 0x02, (void *)hash, SHA256_DIGEST_LENGTH);
+      |                                                                                               ^~~~
+pkcs7.c:30:95: note: each undeclared identifier is reported only once for each function it appears in
+pkcs7.c:30:32: error: passing argument 1 of ‘PKCS7_add_signed_attribute’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+   30 |     PKCS7_add_signed_attribute(pkcs7_raw, OBJ_nid2obj(NID_pkcs9_messageDigest), 0x02, (void *)hash, SHA256_DIGEST_LENGTH);
+      |                                ^~~~~~~~~
+      |                                |
+      |                                PKCS7 * {aka struct pkcs7_st *}
+In file included from pkcs7.h:4,
+                 from pkcs7.c:1:
+/usr/include/openssl/pkcs7.h:273:51: note: expected ‘PKCS7_SIGNER_INFO *’ {aka ‘struct pkcs7_signer_info_st *’} but argument is of type ‘PKCS7 *’ {aka ‘struct pkcs7_st *’}
+  273 | int PKCS7_add_signed_attribute(PKCS7_SIGNER_INFO *p7si, int nid, int type,
+      |                                ~~~~~~~~~~~~~~~~~~~^~~~
+pkcs7.c:30:43: error: passing argument 2 of ‘PKCS7_add_signed_attribute’ makes integer from pointer without a cast [-Werror=int-conversion]
+   30 |     PKCS7_add_signed_attribute(pkcs7_raw, OBJ_nid2obj(NID_pkcs9_messageDigest), 0x02, (void *)hash, SHA256_DIGEST_LENGTH);
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                           |
+      |                                           ASN1_OBJECT * {aka struct asn1_object_st *}
+In file included from pkcs7.h:4,
+                 from pkcs7.c:1:
+/usr/include/openssl/pkcs7.h:273:61: note: expected ‘int’ but argument is of type ‘ASN1_OBJECT *’ {aka ‘struct asn1_object_st *’}
+  273 | int PKCS7_add_signed_attribute(PKCS7_SIGNER_INFO *p7si, int nid, int type,
+      |                                                         ~~~~^~~
+pkcs7.c:30:5: error: too many arguments to function ‘PKCS7_add_signed_attribute’
+   30 |     PKCS7_add_signed_attribute(pkcs7_raw, OBJ_nid2obj(NID_pkcs9_messageDigest), 0x02, (void *)hash, SHA256_DIGEST_LENGTH);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from pkcs7.h:4,
+                 from pkcs7.c:1:
+/usr/include/openssl/pkcs7.h:273:5: note: declared here
+  273 | int PKCS7_add_signed_attribute(PKCS7_SIGNER_INFO *p7si, int nid, int type,
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+zip.c:11:46: error: unknown type name ‘LocalFileHeader’; did you mean ‘ZipLocalFileHeader’?
+   11 | int zip_read_local_file_header(ZipFile *zip, LocalFileHeader *header, unsigned char **filename, unsigned char **extra_field) {
+      |                                              ^~~~~~~~~~~~~~~
+      |                                              ZipLocalFileHeader
+zip.c:27:53: error: unknown type name ‘CentralDirectoryHeader’; did you mean ‘ZipCentralDirectoryRecord’?
+   27 | int zip_read_central_directory_header(ZipFile *zip, CentralDirectoryHeader *header, unsigned char **filename) {
+      |                                                     ^~~~~~~~~~~~~~~~~~~~~~
+      |                                                     ZipCentralDirectoryRecord
+zip.c:41:50: error: unknown type name ‘CentralDirectoryEnd’; did you mean ‘ZipCentralDirectoryRecord’?
+   41 | int zip_find_central_directory_end(ZipFile *zip, CentralDirectoryEnd *end) {
+      |                                                  ^~~~~~~~~~~~~~~~~~~
+      |                                                  ZipCentralDirectoryRecord
+zip.c: In function ‘zip_file_open’:
+zip.c:63:8: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘size’
+   63 |     zip->size = ftell(fp);
+      |        ^~
+zip.c:65:8: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘data’
+   65 |     zip->data = malloc(zip->size);
+      |        ^~
+zip.c:65:27: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘size’
+   65 |     zip->data = malloc(zip->size);
+      |                           ^~
+zip.c:66:13: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘data’
+   66 |     if (!zip->data) {
+      |             ^~
+zip.c:71:14: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘data’
+   71 |     fread(zip->data, zip->size, 1, fp);
+      |              ^~
+zip.c:71:25: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘size’
+   71 |     fread(zip->data, zip->size, 1, fp);
+      |                         ^~
+zip.c:73:8: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘offset’
+   73 |     zip->offset = 0;
+      |        ^~
+zip.c: At top level:
+zip.c:77:6: error: conflicting types for ‘zip_file_close’
+   77 | void zip_file_close(ZipFile *zip) {
+      |      ^~~~~~~~~~~~~~
+In file included from zip.c:7:
+zip.h:69:5: note: previous declaration of ‘zip_file_close’ was here
+   69 | int zip_file_close(ZipFile *zip);
+      |     ^~~~~~~~~~~~~~
+zip.c: In function ‘zip_file_close’:
+zip.c:78:13: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘data’
+   78 |     free(zip->data);
+      |             ^~
+zip.c:79:8: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘size’
+   79 |     zip->size = 0;
+      |        ^~
+zip.c:80:8: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘offset’
+   80 |     zip->offset = 0;
+      |        ^~
+zip.c: In function ‘zip_compute_hash’:
+zip.c:84:5: error: unknown type name ‘CentralDirectoryEnd’; did you mean ‘ZipCentralDirectoryRecord’?
+   84 |     CentralDirectoryEnd end;
+      |     ^~~~~~~~~~~~~~~~~~~
+      |     ZipCentralDirectoryRecord
+zip.c:85:10: error: implicit declaration of function ‘zip_find_central_directory_end’ [-Werror=implicit-function-declaration]
+   85 |     if (!zip_find_central_directory_end(zip, &end)) {
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+zip.c:89:27: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘data’
+   89 |     unsigned char *p = zip->data + end.central_directory_offset;
+      |                           ^~
+zip.c:89:39: error: request for member ‘central_directory_offset’ in something not a structure or union
+   89 |     unsigned char *p = zip->data + end.central_directory_offset;
+      |                                       ^
+zip.c:90:28: error: request for member ‘num_entries’ in something not a structure or union
+   90 |     for (int i = 0; i < end.num_entries; i++) {
+      |                            ^
+zip.c:91:9: error: unknown type name ‘CentralDirectoryFileHeader’
+   91 |         CentralDirectoryFileHeader header;
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+zip.c:94:19: error: implicit declaration of function ‘zip_read_central_directory_file_header’ [-Werror=implicit-function-declaration]
+   94 |         int ret = zip_read_central_directory_file_header(p, &header, &filename, &extra_field);
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+zip.c:99:19: error: request for member ‘signature’ in something not a structure or union
+   99 |         if (header.signature != CENTRAL_DIRECTORY_FILE_HEADER_SIGNATURE) {
+      |                   ^
+zip.c:99:33: error: ‘CENTRAL_DIRECTORY_FILE_HEADER_SIGNATURE’ undeclared (first use in this function)
+   99 |         if (header.signature != CENTRAL_DIRECTORY_FILE_HEADER_SIGNATURE) {
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+zip.c:99:33: note: each undeclared identifier is reported only once for each function it appears in
+zip.c:103:19: error: request for member ‘compression_method’ in something not a structure or union
+  103 |         if (header.compression_method != 0 && header.compression_method != 8) {
+      |                   ^
+zip.c:103:53: error: request for member ‘compression_method’ in something not a structure or union
+  103 |         if (header.compression_method != 0 && header.compression_method != 8) {
+      |                                                     ^
+zip.c:104:88: error: request for member ‘compression_method’ in something not a structure or union
+  104 |             printf("Error: ZIP entry uses unsupported compression method %u.\n", header.compression_method);
+      |                                                                                        ^
+zip.c:107:40: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘data’
+  107 |         unsigned char *entry_data = zip->data + header.relative_offset_of_local_header;
+      |                                        ^~
+zip.c:107:55: error: request for member ‘relative_offset_of_local_header’ in something not a structure or union
+  107 |         unsigned char *entry_data = zip->data + header.relative_offset_of_local_header;
+      |                                                       ^
+zip.c:108:33: error: ‘LocalFileHeader’ undeclared (first use in this function); did you mean ‘ZipLocalFileHeader’?
+  108 |         if (entry_data + sizeof(LocalFileHeader) > zip->data + zip->size) {
+      |                                 ^~~~~~~~~~~~~~~
+      |                                 ZipLocalFileHeader
+zip.c:108:55: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘data’
+  108 |         if (entry_data + sizeof(LocalFileHeader) > zip->data + zip->size) {
+      |                                                       ^~
+zip.c:108:67: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘size’
+  108 |         if (entry_data + sizeof(LocalFileHeader) > zip->data + zip->size) {
+      |                                                                   ^~
+zip.c:112:24: error: expected ‘;’ before ‘local_header’
+  112 |         LocalFileHeader local_header;
+      |                        ^~~~~~~~~~~~~
+      |                        ;
+zip.c:113:17: error: ‘local_header’ undeclared (first use in this function)
+  113 |         memcpy(&local_header, entry_data, sizeof(LocalFileHeader));
+      |                 ^~~~~~~~~~~~
+zip.c:114:39: error: ‘LOCAL_FILE_HEADER_SIGNATURE’ undeclared (first use in this function); did you mean ‘ZIP_LOCAL_FILE_HEADER_SIGNATURE’?
+  114 |         if (local_header.signature != LOCAL_FILE_HEADER_SIGNATURE) {
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                       ZIP_LOCAL_FILE_HEADER_SIGNATURE
+zip.c:122:44: error: ‘MAX_FILENAME_LENGTH’ undeclared (first use in this function)
+  122 |         if (local_header.filename_length > MAX_FILENAME_LENGTH) {
+      |                                            ^~~~~~~~~~~~~~~~~~~
+zip.c:126:120: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘data’
+  126 | data + sizeof(LocalFileHeader) + local_header.filename_length + local_header.extra_field_length > zip->data + zip->size) {
+      |                                                                                                      ^~
+
+zip.c:126:132: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘size’
+  126 |  + sizeof(LocalFileHeader) + local_header.filename_length + local_header.extra_field_length > zip->data + zip->size) {
+      |                                                                                                              ^~
+
+zip.c:132:19: error: request for member ‘compression_method’ in something not a structure or union
+  132 |         if (header.compression_method == 0) {
+      |                   ^
+zip.c:135:59: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘data’
+  135 |             if (entry_data_start + entry_data_length > zip->data + zip->size) {
+      |                                                           ^~
+zip.c:135:71: error: ‘ZipFile’ {aka ‘struct <anonymous>’} has no member named ‘size’
+  135 |             if (entry_data_start + entry_data_length > zip->data + zip->size) {
+      |                                                                       ^~
+zip.c:144:21: error: ‘CentralDirectoryFileHeader’ undeclared (first use in this function)
+  144 |         p += sizeof(CentralDirectoryFileHeader) + header.filename_length + header.extra_field_length + header.file_comment_length;
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+zip.c:144:57: error: request for member ‘filename_length’ in something not a structure or union
+  144 |         p += sizeof(CentralDirectoryFileHeader) + header.filename_length + header.extra_field_length + header.file_comment_length;
+      |                                                         ^
+zip.c:144:82: error: request for member ‘extra_field_length’ in something not a structure or union
+  144 |         p += sizeof(CentralDirectoryFileHeader) + header.filename_length + header.extra_field_length + header.file_comment_length;
+      |                                                                                  ^
+zip.c:144:110: error: request for member ‘file_comment_length’ in something not a structure or union
+  144 | p += sizeof(CentralDirectoryFileHeader) + header.filename_length + header.extra_field_length + header.file_comment_length;
+      |                                                                                                      ^
+
+cc1: all warnings being treated as errors
+config.c: In function ‘find_section’:
+config.c:45:39: error: ‘ConfigSection’ {aka ‘struct <anonymous>’} has no member named ‘section’
+   45 |         if (strcmp(config->sections[i].section, section) == 0) {
+      |                                       ^
+config.c: In function ‘parse_config’:
+config.c:84:35: error: ‘ConfigSection’ {aka ‘struct <anonymous>’} has no member named ‘section’
+   84 |                 strcpy(new_section->section, section_name);
+      |                                   ^~
+config.c:101:62: error: left-hand operand of comma expression has no effect [-Werror=unused-value]
+  101 |                                         config_option->option, option_name);
+      |                                                              ^
+config.c:101:41: error: statement with no effect [-Werror=unused-value]
+  101 |                                         config_option->option, option_name);
+      |                                         ^~~~~~~~~~~~~
+config.c:101:75: error: expected ‘;’ before ‘)’ token
+  101 |                                         config_option->option, option_name);
+      |                                                                           ^
+      |                                                                           ;
+config.c:101:75: error: expected statement before ‘)’ token
+config.c: In function ‘main’:
+config.c:141:33: error: ‘ConfigSection’ {aka ‘struct <anonymous>’} has no member named ‘section’
+  141 |         printf("[%s]\n", section->section);
+      |                                 ^~
+cc1: all warnings being treated as errors
+make: *** [Makefile:6: apksigner] Error 1
